@@ -64,7 +64,58 @@ app.route("/articles")
     });
   });
 
-
+  app.route("/articles/:var")
+  .get((req,res)=>{
+    Article.findOne({title: req.params.var},(err,result)=>{
+      if(result){
+        res.send(result);
+      }
+      else{
+        res.send("Not article found");
+      }
+    })
+  })
+  .put((req, res)=>{
+    Article.updateOne(
+      {title: req.params.var},
+      {title: req.body.title, content: req.body.content},
+      (err)=>{
+        if(!err){
+          res.send("Success!!");
+        }
+        else{
+          res.send(err);
+        }
+      }
+      )
+  })
+  .patch((req,res)=>{
+    Article.updateOne(
+      {title: req.params.var},
+      {$set: req.body},
+      (err)=>{
+        if(!err){
+          res.send("Success!!");
+        }
+        else{
+          res.send(err);
+        }
+      }
+    )
+  })
+  .delete((req,res)=>{
+    Article.deleteOne(
+      {title: req.params.var},
+      (err)=>{
+        if(!err){
+          res.send("Successfully deleted!!");
+        }
+        else{
+          res.send(err);
+        }
+      }
+    )
+  });
 
 
 app.listen(3000, function () {
